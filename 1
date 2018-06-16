@@ -1,0 +1,28 @@
+Conference = artifacts.require('Conference');
+contract('Conference', async accounts => {
+	it("Should assert quota to 50", async () => {
+		let conference = await Conference.deployed();
+		let quota = await conference.quota.call()
+		assert.equal(quota, 50, "quota does not match")	
+	})
+	
+	it("Should assert organizer address to accounts[0]", async () => {
+		let conference = await Conference.deployed();
+		let organizer = await conference.organizer.call();
+		console.log(organizer);
+		assert(organizer, accounts[0], "organizer address set incorrectlty")
+	})
+
+	it("Should assert initial number of registrants to 0", async () => {
+		let conference = await Conference.deployed();
+		let numRegistrants = conference.numRegistrants.call();
+		assert(numRegistrants, 0, "number of initials registrants does not match 0");
+	})
+
+	it("Should buy a ticket from the conference", async () => {
+		let conference = await Conference.deployed();
+		let ticket = await conference.buyTicket.call(accounts[1]);
+		assert(ticket, true, "ticket was bought successfully");
+	})
+
+})
